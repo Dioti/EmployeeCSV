@@ -1,4 +1,4 @@
-package com.sparta.employeecsv;
+package com.sparta.employeecsv.model;
 
 import java.sql.Date;
 
@@ -15,7 +15,16 @@ public class Employee {
     private int salary;
 
     public Employee() {
-        // empty constructor
+        id = -1;
+        title = null;
+        forename = null;
+        middlename = null;
+        surname = null;
+        gender = '\0';
+        email = null;
+        dob = null;
+        joinDate = null;
+        salary = 0;
     }
 
     public Employee(int id, String title, String forename, String middlename, String surname, char gender, String email, Date dob, Date joinDate, int salary) {
@@ -117,6 +126,7 @@ public class Employee {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", forename='" + forename + '\'' +
+                ", middlename='" + middlename + '\'' +
                 ", surname='" + surname + '\'' +
                 ", gender=" + gender +
                 ", email='" + email + '\'' +
