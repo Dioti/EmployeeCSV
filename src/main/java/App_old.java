@@ -1,11 +1,12 @@
-package com.sparta.employeecsv;
+import com.sparta.employeecsv.controller.EmployeeParser;
+import com.sparta.employeecsv.model.Employee;
 
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class App {
+public class App_old {
     public static void main(String[] args) {
         ArrayList<Employee> validEmployees = new ArrayList<Employee>();
         ArrayList<Employee> invalidEmployees = new ArrayList<Employee>();
@@ -19,7 +20,7 @@ public class App {
             long start = System.currentTimeMillis();
             while ((line = in.readLine()) != null) {
                 try {
-                    Employee e = CSVParser.getAsEmployee(line);
+                    Employee e = EmployeeParser.getAsEmployee(line);
                     int id = e.getId();
                     if(!uniqueID.add(id)) {
                         duplicateID.add(id);
@@ -45,7 +46,7 @@ public class App {
         Connection connection = null;
         try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:project.db");
             Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE IF EXISTS Employee");
             statement.executeUpdate("CREATE TABLE Employee (" +
