@@ -1,4 +1,4 @@
-package com.sparta.employeecsv;
+package com.sparta.employeecsv.model;
 
 import com.sparta.employeecsv.model.Employee;
 import org.junit.jupiter.api.Test;
