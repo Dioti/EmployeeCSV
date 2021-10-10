@@ -14,11 +14,6 @@ import java.util.Properties;
 public class SimpleDataSource
 {
 
-    private static String driver;
-    private static String url;
-    private static String username;
-    private static String password;
-
     /**
      Initializes the data source.
      @param stream the input stream read from properties file
@@ -57,4 +52,9 @@ public class SimpleDataSource
         }
         return null;
     }
+
+    private static String driver;
+    private static String url;
+    private static String username;
+    private static String password;
 }
