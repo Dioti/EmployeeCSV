@@ -16,7 +16,7 @@ public class App {
         // read csv
         CSVReader reader = new CSVReader();
         long start = System.currentTimeMillis();
-        reader.read("src/main/resources/EmployeeRecords.csv");
+        reader.read("src/main/resources/EmployeeRecordsLarge.csv");
         long stop = System.currentTimeMillis();
         System.out.println(reader.getStats());
         Stream<Employee> invalidEmployeesStream = reader.getInvalidEmployees().stream();
@@ -30,7 +30,7 @@ public class App {
         // populate database (single-threaded)
         dao.createEmployeesTable();
         start = System.currentTimeMillis();
-        //dao.populateBatchEmployees(reader.getValidEmployees());
+        dao.populateBatchEmployees(reader.getValidEmployees());
         stop = System.currentTimeMillis();
         System.out.println("Time taken to populate database (single-threaded): " + (stop - start) + " ms (~" +
                 Math.round(Long.valueOf(stop - start).doubleValue() / 1000) + " seconds)");
