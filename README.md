@@ -78,3 +78,4 @@ Threads:200 | 1541 ms (~2 seconds)
 - [x] Implement functional programming using streams and lambda expressions
 - [ ] Add more operations to employee dao (update, remove, etc.)
 - [ ] Allow user input through the command line
+- [ ] Rewrite user interface (add GUI maybe?)
