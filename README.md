@@ -60,7 +60,7 @@ Time taken to populate Java collections: 971 ms (~1 seconds)
 Time taken to populate database (single-threaded): 130011 ms (~130 seconds)
 Time taken to populate database (multi-threaded): 11988 ms (~12 seconds)
 ```
-The number of threads has a significant impact on performance, though the perfomance gains does drop off at a certain point. Below show the time taken to populate the database using `EmployeeRecords.csv` and a varying number of threads.
+The number of threads has a significant impact on performance, though the perfomance gains does drop off at a certain point. Below shows the time taken to populate the database using `EmployeeRecords.csv` and a varying number of threads. The optimal number of threads seems to be between 50 and 100.
 ```
 Threads:1   | 20478 ms (~20 seconds)
 Threads:5   | 7640 ms (~8 seconds)
@@ -74,7 +74,7 @@ Threads:200 | 1541 ms (~2 seconds)
 
 ### To-Do List
 
-[x] Implement multi-threading to improve performance
-[x] Implement functional programming using streams and lambda expressions
-[ ] Add more operations to employee dao (update, remove, etc.)
-[ ] Allow user input through the command line
+- [x] Implement multi-threading to improve performance
+- [x] Implement functional programming using streams and lambda expressions
+- [ ] Add more operations to employee dao (update, remove, etc.)
+- [ ] Allow user input through the command line
