@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class EmployeeDAO {
 
     private static String PROP_FILE = "/db.properties";
+    private static int BATCH_SIZE = 50;
 
     /**
      * Constructor for EmployeeDAO class
@@ -24,10 +25,42 @@ public class EmployeeDAO {
 
     /**
      * Populate Employees table with valid employees
+     * @param employeeList : the list of employees to be added to the database
      */
     public void populateEmployees(ArrayList<Employee> employeeList) {
         for(Employee e : employeeList) {
             addEmployee(e);
+        }
+    }
+
+    /**
+     * Populate Employees table with valid employees
+     * @param employeeList : the list of employees to be added to the database
+     */
+    public void populateBatchEmployees(ArrayList<Employee> employeeList) {
+        String sql = "INSERT INTO Employee (id, title, forename, middlename, surname, gender, email, birth_date, join_date, salary) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        try (Connection con = SimpleDataSource.getConnection();
+                PreparedStatement pst = con.prepareStatement(sql)) {
+            int i = 0;
+            for (Employee e : employeeList) {
+                pst.setInt(1, e.getId());
+                pst.setString(2, e.getTitle());
+                pst.setString(3, e.getForename());
+                pst.setString(4, e.getMiddlename());
+                pst.setString(5, e.getSurname());
+                pst.setString(6, String.valueOf(e.getGender()));
+                pst.setString(7, e.getEmail());
+                pst.setDate(8, e.getDob());
+                pst.setDate(9, e.getJoinDate());
+                pst.setInt(10, e.getSalary());
+                pst.addBatch();
+                i++;
+                if (i % BATCH_SIZE == 0 || i == employeeList.size()) { // execute in batches of specified size
+                    pst.executeBatch();
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -58,6 +91,7 @@ public class EmployeeDAO {
 
     /**
      * Add an employee to Employees table using a new Connection
+     * @param e : the employee to be added
      */
     public void addEmployee(Employee e) {
         String sql = "INSERT INTO Employee (id, title, forename, middlename, surname, gender, email, birth_date, join_date, salary) VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -80,9 +114,11 @@ public class EmployeeDAO {
     }
 
     /**
-     * Add an employee to Employees table using a given Connection
+     * Add an employee to a batch using a given Connection
+     * @param e : the employee to be added
+     * @param con : the database connection
      */
-    public void addEmployee(Employee e, Connection con) {
+    public void addBatchEmployee(Employee e, Connection con) {
         String sql = "INSERT INTO Employee (id, title, forename, middlename, surname, gender, email, birth_date, join_date, salary) VALUES (?,?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setInt(1, e.getId());
@@ -95,7 +131,7 @@ public class EmployeeDAO {
             pst.setDate(8, e.getDob());
             pst.setDate(9, e.getJoinDate());
             pst.setInt(10, e.getSalary());
-            pst.execute();
+            pst.addBatch(sql);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

@@ -11,6 +11,7 @@ public class App {
 
     private long start;
     private long stop;
+    private static int NUM_OF_THREADS = 75; // optimal number of threads: 50 - 100
 
     public static void main(String[] args) {
         // read csv
@@ -27,18 +28,24 @@ public class App {
         // populate database (single-threaded)
         dao.createEmployeesTable();
         start = System.currentTimeMillis();
-        dao.populateEmployees(reader.getValidEmployees());
+        dao.populateBatchEmployees(reader.getValidEmployees());
         stop = System.currentTimeMillis();
         System.out.println("Time taken to populate database (single-threaded): " + (stop - start) + " ms (~" + Math.round((stop - start) / 1000) + " seconds)");
 
         // populate database (multi-threaded)
-        int numOfThreads = 3;
         ArrayList<Thread> threads = new ArrayList<>();
-        ArrayList<Employee> sharedList = reader.getValidEmployees();
+        ArrayList<Employee> employeeList = reader.getValidEmployees();
+        int offset = (int) Math.ceil(employeeList.size() / NUM_OF_THREADS);
         dao.createEmployeesTable(); // remake table
         start = System.currentTimeMillis();
-        for(int i = 1; i < numOfThreads + 1; i++) {
-            Thread t = new Thread(new ThreadedWriter(i, sharedList, dao));
+        for(int i = 0; i < NUM_OF_THREADS; i++) {
+            int lower = 0 + (offset * i);
+            int upper = offset + (offset * i);
+            if(upper > employeeList.size()) {
+                upper = employeeList.size();
+            }
+            ArrayList<Employee> segment = new ArrayList<>(employeeList.subList(lower, upper));
+            Thread t = new Thread(new ThreadedWriter(i + 1, segment, dao));
             threads.add(t);
             t.start();
         }
