@@ -25,8 +25,8 @@ public class EmployeeDAO {
     /**
      * Populate Employees table with valid employees
      */
-    public void populateEmployees(ArrayList<Employee> validEmployees) {
-        for(Employee e : validEmployees) {
+    public void populateEmployees(ArrayList<Employee> employeeList) {
+        for(Employee e : employeeList) {
             addEmployee(e);
         }
     }
@@ -57,12 +57,34 @@ public class EmployeeDAO {
     }
 
     /**
-     * Add an employee to Employees table
+     * Add an employee to Employees table using a new Connection
      */
     public void addEmployee(Employee e) {
         String sql = "INSERT INTO Employee (id, title, forename, middlename, surname, gender, email, birth_date, join_date, salary) VALUES (?,?,?,?,?,?,?,?,?,?)";
         try (Connection con = SimpleDataSource.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setInt(1, e.getId());
+            pst.setString(2, e.getTitle());
+            pst.setString(3, e.getForename());
+            pst.setString(4, e.getMiddlename());
+            pst.setString(5, e.getSurname());
+            pst.setString(6, String.valueOf(e.getGender()));
+            pst.setString(7, e.getEmail());
+            pst.setDate(8, e.getDob());
+            pst.setDate(9, e.getJoinDate());
+            pst.setInt(10, e.getSalary());
+            pst.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Add an employee to Employees table using a given Connection
+     */
+    public void addEmployee(Employee e, Connection con) {
+        String sql = "INSERT INTO Employee (id, title, forename, middlename, surname, gender, email, birth_date, join_date, salary) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setInt(1, e.getId());
             pst.setString(2, e.getTitle());
             pst.setString(3, e.getForename());
