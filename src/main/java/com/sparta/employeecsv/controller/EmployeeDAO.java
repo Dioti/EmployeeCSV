@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class EmployeeDAO {
 
-    private static String PROP_FILE = "/db.properties";
-    private static int BATCH_SIZE = 50;
+    private static final String PROP_FILE = "/db.properties";
+    private static final int BATCH_SIZE = 50;
 
     /**
      * Constructor for EmployeeDAO class
@@ -59,7 +59,7 @@ public class EmployeeDAO {
                     pst.executeBatch();
                 }
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -71,19 +71,21 @@ public class EmployeeDAO {
         try (Connection con = SimpleDataSource.getConnection();
              Statement st = con.createStatement()){
             st.executeUpdate("DROP TABLE IF EXISTS Employee");
-            st.executeUpdate("CREATE TABLE `project`.`employee` (\n" +
-                    "  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
-                    "  `title` VARCHAR(6) NULL,\n" +
-                    "  `forename` VARCHAR(45) NOT NULL,\n" +
-                    "  `middlename` VARCHAR(45) NULL,\n" +
-                    "  `surname` VARCHAR(45) NOT NULL,\n" +
-                    "  `gender` CHAR(1) NOT NULL,\n" +
-                    "  `email` VARCHAR(45) NULL,\n" +
-                    "  `birth_date` DATE NOT NULL,\n" +
-                    "  `join_date` DATE NOT NULL,\n" +
-                    "  `salary` INT NOT NULL DEFAULT 0,\n" +
-                    "  PRIMARY KEY (`id`),\n" +
-                    "  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);\n");
+            st.executeUpdate("""
+                    CREATE TABLE `project`.`employee` (
+                      `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                      `title` VARCHAR(6) NULL,
+                      `forename` VARCHAR(45) NOT NULL,
+                      `middlename` VARCHAR(45) NULL,
+                      `surname` VARCHAR(45) NOT NULL,
+                      `gender` CHAR(1) NOT NULL,
+                      `email` VARCHAR(45) NULL,
+                      `birth_date` DATE NOT NULL,
+                      `join_date` DATE NOT NULL,
+                      `salary` INT NOT NULL DEFAULT 0,
+                      PRIMARY KEY (`id`),
+                      UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
+                    """);
         } catch (SQLException e) {
             e.printStackTrace();
         }
