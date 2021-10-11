@@ -1,7 +1,6 @@
 package com.sparta.employeecsv.model;
 
 import java.sql.Date;
-import java.util.Objects;
 
 public class Employee {
     private int id;

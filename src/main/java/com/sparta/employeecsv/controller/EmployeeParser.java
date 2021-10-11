@@ -11,7 +11,7 @@ import java.util.Set;
 public class EmployeeParser {
 
     private static final Set<String> TITLE = new HashSet<>(Arrays.asList(
-            "Mr.", "Miss.", "Mrs.", "Mx.", "Prof.", "Hon.", "Dr.", "Drs.")); // add more or whatever
+            "Mr.", "Miss.", "Mrs.", "Ms.", "Mx.", "Prof.", "Hon.", "Dr.", "Drs.")); // add more or whatever
     private static final Set<Character> GENDER = new HashSet<>(Arrays.asList(
             'M', 'F', 'N'));
 
